@@ -1,19 +1,9 @@
-# Tugas Pemrograman Berbasis Objek Praktik
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/ec28e005-94d6-4e56-9eca-1707c529894f" alt="Foto Anda" style="width: 120px; height: auto;">
+    <img src="https://github.com/user-attachments/assets/bee51b14-4232-4e81-b171-686d33b1ea01" alt="Foto Anda" style="width: 500px; height: auto;">
+    <img src="https://github.com/user-attachments/assets/06078620-fa57-470b-9eac-f957da614b75" alt="Foto Anda" style="width: 120px; height: auto;">
+</p>
 
-### Dosen
-
-- **Ledy Elsera Astrianty, S.Kom., M.Kom**
-
-#### Kelompok 6
-
-- **Zaenal Arifin**
-- **Zidan Alfiyan Mubarok**
-- **Novanda Rifqi Rajendra**
-
-
-
-
-```markdown
 # Sewa Kamera - Aplikasi Penyewaan Kamera
 
 Sewa Kamera adalah aplikasi sederhana untuk mengelola penyewaan kamera. Pengguna dapat melihat daftar kamera yang tersedia, menambah, mengedit, dan menghapus kamera, serta melihat daftar penyewa yang telah melakukan peminjaman. Aplikasi ini menggunakan SQLite sebagai database dan Streamlit sebagai antarmuka pengguna.
@@ -81,6 +71,18 @@ sewa_kamera/
 ├── rental_camera.py        # ini hanya di jalankan di terminal
 └── README.md               # Dokumentasi proyek
 ```
+
+# Tugas Pemrograman Berbasis Objek Praktik
+
+### Dosen
+
+- **Ledy Elsera Astrianty, S.Kom., M.Kom**
+
+#### Kelompok 6
+
+- **Zaenal Arifin**
+- **Zidan Alfiyan Mubarok**
+- **Novanda Rifqi Rajendra**
 
 
 
