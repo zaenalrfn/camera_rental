@@ -8,9 +8,11 @@
     <img src="https://github.com/user-attachments/assets/06078620-fa57-470b-9eac-f957da614b75" alt="Foto Anda" style="width: 120px; height: auto;">
 </p>
 
+
+###
 <div align="center">
 
-# 🎥📸 **Sewa Kamera** - Aplikasi Penyewaan Kamera 
+# 📸 **Sewa Kamera** - Aplikasi Penyewaan Kamera 🎥
 
 </div>
 
@@ -51,9 +53,22 @@ Aplikasi ini adalah **Sistem Sewa Kamera** berbasis web yang dibangun menggunaka
 ---
 
 ## 🛠️ **Teknologi yang Digunakan**
-- **Streamlit**: Untuk antarmuka.
-- **SQLite**: Database penyimpanan data.
-- **Pandas**: Manipulasi data.
+
+  <div align="center">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" height="40" alt="vscode logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" height="40" alt="python logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/streamlit/streamlit-original.svg" height="40" alt="Streamlit logo"  />
+  <img width="12" />
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/pandas/pandas-original-wordmark.svg" height="40" alt="pandas logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=tailwind" height="40" alt="tailwindcss logo"  />
+  <img width="12" />
+  <img src="https://skillicons.dev/icons?i=sqlite" height="40" alt="sqlite logo"  />
+  <img width="12" />
+  <img src="https://cdn.simpleicons.org/nginx/009639" height="40" alt="nginx logo"  />
+</div>
 
 [🔗 Demo Aplikasi](https://znz-rental-yogyakarta.streamlit.app/)
 
