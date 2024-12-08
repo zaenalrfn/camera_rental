@@ -107,6 +107,7 @@ Aplikasi akan berjalan di browser: **`http://localhost:8501`**
 ```
 sewa_kamera/
 ├── sewa_kamera_gui.py      # Aplikasi utama
+├── sewa_kamera.py      # Versi Terminal
 ├── sewa_kamera.db          # Database SQLite
 ├── requirements.txt        # Dependensi
 └── README.md               # Dokumentasi
