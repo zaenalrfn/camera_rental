@@ -8,7 +8,8 @@ import time
 def init_db():
     conn = sqlite3.connect("sewa_kamera.db")
     cursor = conn.cursor()
-
+    
+    # Create kamera table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS kamera (
         id INTEGER PRIMARY KEY,
@@ -18,6 +19,7 @@ def init_db():
     )
     """)
 
+    # Create penyewa table
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS penyewa (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,10 +30,12 @@ def init_db():
         hari INTEGER,
         total_harga INTEGER,
         tanggal_sewa TEXT,
+        tanggal_kembali TEXT,
         status TEXT,
         FOREIGN KEY(kamera_id) REFERENCES kamera(id)
     )
     """)
+
 
 
     cursor.execute("SELECT COUNT(*) FROM kamera")
@@ -75,7 +79,7 @@ def lihat_penyewa():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM penyewa")
     data = cursor.fetchall()
-    penyewa_df = pd.DataFrame(data, columns=["id", "nama", "nomor_telepon", "kamera_id", "jumlah", "hari", "total_harga", "tanggal_sewa", "status"])
+    penyewa_df = pd.DataFrame(data, columns=["id", "nama", "nomor_telepon", "kamera_id", "jumlah", "hari", "total_harga", "tanggal_kembali", "tanggal_sewa", "status"])
     conn.close()
     return penyewa_df
 
@@ -123,13 +127,79 @@ def edit_penyewa(penyewa_id, nama, nomor_telepon, jumlah, hari):
     conn.close()
 
 
+from datetime import datetime, timedelta
+
 def update_status(id_penyewa, status):
     conn = sqlite3.connect("sewa_kamera.db")
     cursor = conn.cursor()
-    cursor.execute("UPDATE penyewa SET status = ? WHERE id = ?", (status, id_penyewa))
-    conn.commit()
-    conn.close()
-
+    
+    try:
+        # Retrieve detailed rental information
+        cursor.execute("""
+            SELECT p.kamera_id, p.jumlah, p.tanggal_sewa, p.hari, p.total_harga, 
+                   k.harga AS harga_kamera, p.status
+            FROM penyewa p
+            JOIN kamera k ON p.kamera_id = k.id
+            WHERE p.id = ?
+        """, (id_penyewa,))
+        rental_info = cursor.fetchone()
+        
+        if rental_info:
+            kamera_id, jumlah_dipinjam, tanggal_sewa, hari_sewa, total_harga, harga_kamera, current_status = rental_info
+            
+            # Calculate expected return date and current date
+            tanggal_sewa = datetime.strptime(tanggal_sewa, "%Y-%m-%d")
+            expected_return_date = tanggal_sewa + timedelta(days=hari_sewa)
+            current_date = datetime.now()
+            
+            # Calculate denda (penalty)
+            denda = 0
+            if current_date > expected_return_date and status == "Selesai":
+                days_overdue = (current_date - expected_return_date).days
+                denda = days_overdue * harga_kamera  # Denda sebesar harga kamera per hari
+                
+                # Update total harga with denda
+                total_harga_baru = total_harga + denda
+                
+                # Update penyewa table with new total harga and status
+                cursor.execute("""
+                    UPDATE penyewa 
+                    SET status = ?, total_harga = ?, tanggal_kembali = ?
+                    WHERE id = ?
+                """, (status, total_harga_baru, current_date.strftime("%Y-%m-%d"), id_penyewa))
+                
+                # Optional: Add a notification or log about the denda
+                print(f"Denda applied: {denda} for {days_overdue} days overdue")
+            else:
+                # Just update status if no denda
+                cursor.execute("""
+                    UPDATE penyewa 
+                    SET status = ?, tanggal_kembali = ?
+                    WHERE id = ?
+                """, (status, current_date.strftime("%Y-%m-%d"), id_penyewa))
+            
+            # If status is 'Selesai', update camera stock
+            if status == "Selesai":
+                cursor.execute("""
+                    UPDATE kamera 
+                    SET stok = stok + ? 
+                    WHERE id = ?
+                """, (jumlah_dipinjam, kamera_id))
+        
+        # Commit the transaction
+        conn.commit()
+        
+        return denda  # Return denda for potential UI notification
+    
+    except sqlite3.Error as e:
+        # Rollback in case of any error
+        conn.rollback()
+        print(f"An error occurred: {e}")
+        return 0
+    
+    finally:
+        # Always close the connection
+        conn.close()
 
 def statistik_sewa_mingguan():
     conn = sqlite3.connect("sewa_kamera.db")
@@ -448,17 +518,25 @@ def main():
 
             # Tombol untuk memperbarui status
             if st.button("Update Status"):
-                update_status(penyewa_id, new_status)
-                progress_text = "Sedang menyimpan.Tunggu."
-                my_bar = st.progress(0, text=progress_text)
+                denda = update_status(penyewa_id, new_status)
 
+                progress_text = "Sedang menyimpan. Tunggu."
+                my_bar = st.progress(0, text=progress_text)
                 for percent_complete in range(100):
                     time.sleep(0.01)
                     my_bar.progress(percent_complete + 1, text=progress_text)
+
                 time.sleep(1)
                 my_bar.empty()
-                with st.spinner('Tunggu sebentar...'):time.sleep(4)
-                st.toast('Done ...' , icon="✅")
+
+                with st.spinner('Tunggu sebentar...'):
+                    time.sleep(4)
+
+                st.toast('Selesai' , icon="✅")
+
+                if denda > 0:
+                    st.warning(f"Denda dikenakan: Rp {denda:,} karena keterlambatan pengembalian")
+
                 st.success(f"Status penyewa dengan ID {penyewa_id} berhasil diperbarui menjadi {new_status}")
 
         elif submenu_sewa == "Hapus":
