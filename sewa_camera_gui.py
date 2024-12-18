@@ -5,6 +5,9 @@ from streamlit_option_menu import option_menu
 from datetime import datetime
 import time
 
+st.set_page_config(page_title="ZNZ Luxury Camera Rental",
+                   page_icon=":camera:",
+                   layout="centered")
 def init_db():
     conn = sqlite3.connect("sewa_kamera.db")
     cursor = conn.cursor()

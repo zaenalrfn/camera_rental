@@ -1,6 +1,7 @@
 import sqlite3
 import streamlit as st
 
+
 def get_kamera_data():
     conn = sqlite3.connect("sewa_kamera.db")
     cursor = conn.cursor()
@@ -29,8 +30,25 @@ def insert_penyewa(nama, nomor_telepon, kamera_id, jumlah, hari, total_harga, ta
 
 def main():
     st.set_page_config(page_title="ZNZ Rental Camera Luxury")
-    st.title("ZNZ Luxury Camera Rental")
-    st.write("Berikut adalah daftar kamera yang tersedia untuk disewa:")
+    
+    # Menyisipkan font dari Google Fonts
+    st.markdown("""
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+            .title {
+                font-family: 'Agu Display';
+                text-align: center;
+                font-size: 36px; /* Ukuran font */
+                color: #333; /* Warna font */
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<h1 class='title'>ZNZ Luxury Camera Rental</h1>", unsafe_allow_html=True)
+    
+    # st.write("Berikut adalah daftar kamera yang tersedia untuk disewa:")
+    st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True)
+
 
     kamera_data = get_kamera_data()
 
