@@ -130,7 +130,33 @@ class SistemSewaKamera:
         except ValueError:
             print("Input tidak valid.")
 
+    def tambah_kamera(self):
+        try:
+            id_kamera = len(self.kamera_list) + 1
+            nama = input("Masukkan nama kamera: ")
+            stok = int(input("Masukkan jumlah stok: "))
+            harga = int(input("Masukkan harga sewa per hari: "))
 
+            # Meminta input jenis kamera
+            print("Pilih jenis kamera:")
+            print("1. DSLR")
+            print("2. Mirrorless")
+            jenis = int(input("Masukkan pilihan (1/2): "))
+
+            if jenis == 1:
+                lensa = input("Masukkan jenis lensa: ")
+                kamera_baru = DSLR(id_kamera, nama, stok, harga, lensa)
+            elif jenis == 2:
+                berat = float(input("Masukkan berat kamera (kg): "))
+                kamera_baru = Mirrorless(id_kamera, nama, stok, harga, berat)
+            else:
+                print("Pilihan jenis kamera tidak valid.")
+                return
+
+            self.kamera_list.append(kamera_baru)
+            print("Kamera baru berhasil ditambahkan!")
+        except ValueError:
+            print("Input tidak valid, coba lagi.")
     def lihat_penyewa(self):
         print("\n=== Data Penyewa ===")
         if not self.data_penyewa:
