@@ -39,7 +39,6 @@ def main():
                 font-family: 'Agu Display';
                 text-align: center;
                 font-size: 36px; /* Ukuran font */
-                color: #333; /* Warna font */
             }
         </style>
     """, unsafe_allow_html=True)
