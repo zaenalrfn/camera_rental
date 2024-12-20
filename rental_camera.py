@@ -77,7 +77,48 @@ class SistemSewaKamera:
                 print("\nStok tidak mencukupi atau kamera tidak ditemukan!")
         except ValueError:
             print("\nInput tidak valid, coba lagi.")
+    def edit_kamera(self):
+        try:
+            print("\n=== Edit Kamera ===")
+            self.lihat_kamera()
+            id_kamera = int(input("Masukkan ID Kamera yang ingin diedit: "))
+            kamera = next(
+                (k for k in self.kamera_list if k.id_kamera == id_kamera), None
+            )
 
+            if kamera:
+                print(
+                    "Kamera ditemukan. Masukkan data baru (kosongkan untuk tidak mengubah):"
+                )
+                nama = input(f"Nama ({kamera.nama}): ") or kamera.nama
+                stok = input(f"Stok ({kamera.stok}): ")
+                stok = int(stok) if stok else kamera.stok
+                harga = input(f"Harga ({kamera.harga}): ")
+                harga = int(harga) if harga else kamera.harga
+
+                if isinstance(kamera, DSLR):
+                    detail = input(f"Lensa ({kamera.lensa}): ") or kamera.lensa
+                    kamera.nama, kamera.stok, kamera.harga, kamera.lensa = (
+                        nama,
+                        stok,
+                        harga,
+                        detail,
+                    )
+                elif isinstance(kamera, Mirrorless):
+                    berat = input(f"Berat ({kamera.berat} kg): ")
+                    berat = float(berat) if berat else kamera.berat
+                    kamera.nama, kamera.stok, kamera.harga, kamera.berat = (
+                        nama,
+                        stok,
+                        harga,
+                        berat,
+                    )
+
+                print("Kamera berhasil diperbarui!")
+            else:
+                print("Kamera tidak ditemukan!")
+        except ValueError:
+            print("Input tidak valid, coba lagi.")
     def edit_status_penyewa(self):
         try:
             nama_penyewa = input("Masukkan nama penyewa untuk mengedit status pengembalian: ")
@@ -170,7 +211,19 @@ class SistemSewaKamera:
                 else:
                     print(f"{idx}. Nama: {penyewa['nama']} | Kamera: {penyewa['kamera']} | Jumlah: {penyewa['jumlah']} | Hari: {penyewa['hari']} | Total Harga: Rp{penyewa['total_harga']} | Tanggal Sewa: {penyewa['tanggal_sewa'].strftime('%d-%m-%Y')} | Status: {penyewa['status_pengembalian']}")
 
-
+    def hapus_kamera(self):
+        id_kamera = int(input("Masukkan ID kamera yang ingin dihapus: "))
+        for index, kamera in enumerate(self.kamera_list):
+            if kamera.id_kamera == id_kamera:
+                konfirmasi = input(f"Apakah Anda yakin ingin menghapus kamera {kamera.nama}? (y/n): ")
+                if konfirmasi.lower() == 'y':
+                    del self.kamera_list[index]
+                    print("Kamera berhasil dihapus.")
+                    return  # Keluar dari fungsi setelah menghapus
+                else:
+                    print("Penghapusan dibatalkan.")
+                    return  # Keluar dari fungsi jika dibatalkan
+        print("Kamera tidak ditemukan.")
     def menu_penyewa(self):
         while True:
             print("\n=== Menu Penyewa ===")
