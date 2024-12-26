@@ -134,10 +134,16 @@ class SistemSewaKamera:
                 if status_choice == 1:
                     penyewa["status_pengembalian"] = "Proses"
                 elif status_choice == 2:
+                    # Tambahkan input untuk kondisi kamera
+                    kondisi_kamera = input("Masukkan kondisi kamera (NORMAL/RUSAK): ").upper()
+                    if kondisi_kamera not in ["NORMAL", "RUSAK"]:
+                        print("Kondisi kamera tidak valid! Harus NORMAL atau RUSAK.")
+                        return
+                    
                     # Menghitung denda jika terlambat
                     tanggal_kembali = datetime.now()  # Waktu sekarang
                     tanggal_sewa = penyewa["tanggal_sewa"]
-                    terlambat_hari = (tanggal_kembali - tanggal_sewa).days
+                    terlambat_hari = (tanggal_kembali - tanggal_sewa).days - penyewa["hari"]
 
                     if terlambat_hari > 0:
                         # Menghitung denda: denda dihitung per hari sesuai harga sewa per hari
@@ -145,11 +151,11 @@ class SistemSewaKamera:
                         if kamera:
                             denda = kamera.harga * terlambat_hari  # Denda per hari sama dengan harga sewa kamera per hari
                             total_bayar = penyewa["total_harga"] + denda
-                            penyewa["status_pengembalian"] = f"Selesai (Denda: Rp{denda}, Total: Rp{total_bayar})"
+                            penyewa["status_pengembalian"] = f"Selesai (Denda: Rp{denda}, Total: Rp{total_bayar}, Kondisi: {kondisi_kamera})"
                             print(f"Total denda untuk {terlambat_hari} hari terlambat: Rp{denda}")
                             print(f"Total harga yang harus dibayar: Rp{total_bayar}")
                     else:
-                        penyewa["status_pengembalian"] = f"Selesai (Total: Rp{penyewa['total_harga']})"
+                        penyewa["status_pengembalian"] = f"Selesai (Total: Rp{penyewa['total_harga']}, Kondisi: {kondisi_kamera})"
                         print(f"Total harga yang harus dibayar: Rp{penyewa['total_harga']}")
 
                     # Mengembalikan stok kamera
@@ -170,6 +176,7 @@ class SistemSewaKamera:
                 print("Penyewa tidak ditemukan!")
         except ValueError:
             print("Input tidak valid.")
+
 
     def tambah_kamera(self):
         try:
@@ -205,11 +212,13 @@ class SistemSewaKamera:
         else:
             for idx, penyewa in enumerate(self.data_penyewa, start=1):
                 status = penyewa['status_pengembalian']
+                kondisi_kamera = penyewa.get('kondisi_kamera', 'Tidak diketahui')  # Ambil kondisi kamera, default jika tidak ada
                 # Menampilkan status dan denda jika ada
                 if "Denda" in status:  # Jika ada denda dalam status
-                    print(f"{idx}. Nama: {penyewa['nama']} | Kamera: {penyewa['kamera']} | Jumlah: {penyewa['jumlah']} | Hari: {penyewa['hari']} | Total Harga: Rp{penyewa['total_harga']} | Tanggal Sewa: {penyewa['tanggal_sewa'].strftime('%d-%m-%Y')} | Status: {penyewa['status_pengembalian']}")
+                    print(f"{idx}. Nama: {penyewa['nama']} | Kamera: {penyewa['kamera']} | Kondisi Kamera: {kondisi_kamera} | Jumlah: {penyewa['jumlah']} | Hari: {penyewa['hari']} | Total Harga: Rp{penyewa['total_harga']} | Tanggal Sewa: {penyewa['tanggal_sewa'].strftime('%d-%m-%Y')} | Status: {penyewa['status_pengembalian']}")
                 else:
-                    print(f"{idx}. Nama: {penyewa['nama']} | Kamera: {penyewa['kamera']} | Jumlah: {penyewa['jumlah']} | Hari: {penyewa['hari']} | Total Harga: Rp{penyewa['total_harga']} | Tanggal Sewa: {penyewa['tanggal_sewa'].strftime('%d-%m-%Y')} | Status: {penyewa['status_pengembalian']}")
+                    print(f"{idx}. Nama: {penyewa['nama']} | Kamera: {penyewa['kamera']} | Kondisi Kamera: {kondisi_kamera} | Jumlah: {penyewa['jumlah']} | Hari: {penyewa['hari']} | Total Harga: Rp{penyewa['total_harga']} | Tanggal Sewa: {penyewa['tanggal_sewa'].strftime('%d-%m-%Y')} | Status: {penyewa['status_pengembalian']}")
+
 
     def hapus_kamera(self):
         id_kamera = int(input("Masukkan ID kamera yang ingin dihapus: "))
