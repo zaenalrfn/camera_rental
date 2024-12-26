@@ -106,11 +106,11 @@ Aplikasi akan berjalan di browser: **`http://localhost:8501`**
 ## 📂 **Struktur Proyek**
 ```
 sewa_kamera/
-├── sewa_kamera_gui.py      # Aplikasi utama
-├── sewa_kamera.py      # Versi Terminal
+├── admin.py                # Manage rentals
+├── sewa_kamera.py          # Terminal Version
 ├── sewa_kamera.db          # Database SQLite
-├── requirements.txt        # Dependensi
-└── README.md               # Dokumentasi
+├── requirements.txt        # dependency 
+└── README.md               # Documentation
 ```
 
 <div align="center">
