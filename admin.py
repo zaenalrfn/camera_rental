@@ -456,45 +456,46 @@ def main():
     elif selected_menu == "Sewa":
         submenu_sewa = option_menu(
             menu_title="Sewa",
-            options=["Sewa Kamera", "Lihat Penyewa", "Status", "Hapus"],
+            options=["Lihat Penyewa", "Status", "Hapus"],
             icons=["clipboard", "eye", "clock", "trash"],
             menu_icon="hand-holding-box",
             default_index=0,
             orientation="horizontal"
         )
         
-        if submenu_sewa == "Sewa Kamera":
-            st.header("📥 Form Sewa Kamera")
+        # if submenu_sewa == "Sewa Kamera":
+        #     st.header("📥 Form Sewa Kamera")
 
-            # Input data penyewa
-            nama = st.text_input("Nama Penyewa")
-            nomor_telepon = st.text_input("Nomor Telepon")
+        #     # Input data penyewa
+        #     nama = st.text_input("Nama Penyewa")
+        #     nomor_telepon = st.text_input("Nomor Telepon")
 
-            # Menampilkan daftar kamera
-            kamera_df = lihat_kamera()  # Mengambil daftar kamera
-            kamera_dict = {row['nama']: row['id'] for index, row in kamera_df.iterrows()}
-            kamera_pilihan = st.selectbox("Pilih Kamera", list(kamera_dict.keys()))
+        #     # Menampilkan daftar kamera
+        #     kamera_df = lihat_kamera()  # Mengambil daftar kamera
+        #     kamera_dict = {row['nama']: row['id'] for index, row in kamera_df.iterrows()}
+        #     kamera_pilihan = st.selectbox("Pilih Kamera", list(kamera_dict.keys()))
 
-            # Input jumlah unit dan durasi sewa
-            jumlah = st.number_input("Jumlah Unit", min_value=1, step=1)
-            hari = st.number_input("Durasi Sewa (hari)", min_value=1, step=1)
+        #     # Input jumlah unit dan durasi sewa
+        #     jumlah = st.number_input("Jumlah Unit", min_value=1, step=1)
+        #     hari = st.number_input("Durasi Sewa (hari)", min_value=1, step=1)
 
-            # Menambahkan input tanggal sewa
-            tanggal_sewa = st.date_input("Tanggal Sewa", min_value=datetime.today().date())
+        #     # Menambahkan input tanggal sewa
+        #     tanggal_sewa = st.date_input("Tanggal Sewa", min_value=datetime.today().date())
 
-            if st.button("Sewa"):
-                kamera_id = kamera_dict[kamera_pilihan]
+        #     if st.button("Sewa"):
+        #         kamera_id = kamera_dict[kamera_pilihan]
 
-                # Memanggil fungsi sewa_kamera dengan parameter tambahan tanggal_sewa
-                sukses, total_harga = sewa_kamera(nama, nomor_telepon, kamera_id, jumlah, hari, tanggal_sewa)
+        #         # Memanggil fungsi sewa_kamera dengan parameter tambahan tanggal_sewa
+        #         sukses, total_harga = sewa_kamera(nama, nomor_telepon, kamera_id, jumlah, hari, tanggal_sewa)
 
-                if sukses:
-                    st.success(f"Kamera berhasil disewa! Total harga: Rp{total_harga}")
-                    st.toast('Berhasil sewa ...' , icon="✅")
-                else:
-                    st.error("Stok kamera tidak cukup", icon="🚨")
-                    st.toast('Stok kosong ...' , icon="⚠️")
-        elif submenu_sewa == "Lihat Penyewa":
+        #         if sukses:
+        #             st.success(f"Kamera berhasil disewa! Total harga: Rp{total_harga}")
+        #             st.toast('Berhasil sewa ...' , icon="✅")
+        #         else:
+        #             st.error("Stok kamera tidak cukup", icon="🚨")
+        #             st.toast('Stok kosong ...' , icon="⚠️")
+        #jika ada menu di atas maka else submenu_sewa 
+        if submenu_sewa == "Lihat Penyewa":
             st.header("📊 Daftar Penyewa")
             penyewa_df = lihat_penyewa()
             st.dataframe(penyewa_df)
